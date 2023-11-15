@@ -9,9 +9,9 @@
     <color name="white">#FFFFFFFF</color>
 
     <color name="accent1_lighter">@color/purple_200</color>
-    <color name="accent1_darker">@color/purple_700</color>
-    <color name="accent2_500">@color/purple_500</color>
-    <color name="accent3_500">@color/purple_500</color>
+    <color name="accent1_darker">@color/teal_200</color>
+    <color name="accent2_500">@color/teal_200</color>
+    <color name="accent3_500">@color/teal_200</color>
     <color name="neutral1_500">@color/white</color>
     <color name="neutral2_500">@color/white</color>
     <color name="neutral1_0">@color/black</color>
