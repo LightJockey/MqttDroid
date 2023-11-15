@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@+id/navigation_controls">
+
+    <fragment
+        android:id="@+id/navigation_controls"
+        android:name="lightjockey.mqttdroid.ui.controls.ControlsFragment"
+        android:label="@string/title_controls"
+        tools:layout="@layout/fragment_controls" />
+
+    <fragment
+        android:id="@+id/navigation_logs"
+        android:name="lightjockey.mqttdroid.ui.logs.LogsFragment"
+        android:label="@string/title_logs"
+        tools:layout="@layout/fragment_logs" />
+
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="lightjockey.mqttdroid.ui.settings.SettingsFragment"
+        android:label="@string/title_settings"
+        tools:layout="@layout/fragment_settings" />
+</navigation>

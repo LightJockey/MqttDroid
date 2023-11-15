@@ -1,0 +1,24 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.MqttDroid" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary brand color. -->
+        <item name="colorPrimary">@color/accent1_darker</item>
+        <item name="colorPrimaryVariant">@color/accent1_darker</item>
+        <item name="colorOnPrimary">@color/black</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/accent3_500</item>
+        <item name="colorSecondaryVariant">@color/accent3_500</item>
+        <item name="colorOnSecondary">@color/black</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <!-- Customize your theme here. -->
+        <item name="alertDialogTheme">@style/Theme.MqttDroid.AlertDialog</item>
+        <item name="preferenceTheme">@style/Theme.MqttDroid.Preference.Dark</item>
+    </style>
+
+    <style name="Theme.MqttDroid.Preference.Dark" parent="PreferenceThemeOverlay">
+        <item name="switchPreferenceCompatStyle">@style/PreferenceMaterialSwitch</item>
+        <item name="android:tint">@android:color/white</item>
+    </style>
+</resources>

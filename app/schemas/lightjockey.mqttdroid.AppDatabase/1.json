@@ -1,0 +1,190 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 1,
+    "identityHash": "efb254bcacfa841b7fd43d762d46455f",
+    "entities": [
+      {
+        "tableName": "controls",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT, `subtitle` TEXT, `group` TEXT, `type` INTEGER NOT NULL, `flavour` INTEGER NOT NULL, `custom_icon` INTEGER NOT NULL, `custom_color` INTEGER NOT NULL, `needs_unlocking` INTEGER NOT NULL, `trigger_payload` TEXT, `gauge_topic` TEXT, `state_on_payload` TEXT, `state_off_payload` TEXT, `state_label_from_payload` INTEGER NOT NULL, `value_min` REAL NOT NULL, `value_max` REAL NOT NULL, `value_step` REAL NOT NULL, `value_show_percentage` INTEGER NOT NULL, `trigger_topic` TEXT, `trigger_qos` INTEGER, `trigger_retained` INTEGER, `state_topic` TEXT, `state_qos` INTEGER, `state_retained` INTEGER, `value_topic` TEXT, `value_qos` INTEGER, `value_retained` INTEGER)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "subtitle",
+            "columnName": "subtitle",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "group",
+            "columnName": "group",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "flavour",
+            "columnName": "flavour",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "customIcon",
+            "columnName": "custom_icon",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "customColor",
+            "columnName": "custom_color",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "needsUnlocking",
+            "columnName": "needs_unlocking",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "triggerPayload",
+            "columnName": "trigger_payload",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "gaugeTopic",
+            "columnName": "gauge_topic",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "stateOnPayload",
+            "columnName": "state_on_payload",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "stateOffPayload",
+            "columnName": "state_off_payload",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "stateLabelFromPayload",
+            "columnName": "state_label_from_payload",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "valueMin",
+            "columnName": "value_min",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "valueMax",
+            "columnName": "value_max",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "valueStep",
+            "columnName": "value_step",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "valueShowPercentage",
+            "columnName": "value_show_percentage",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "triggerTopic.topic",
+            "columnName": "trigger_topic",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "triggerTopic.qos",
+            "columnName": "trigger_qos",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "triggerTopic.retained",
+            "columnName": "trigger_retained",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "stateTopic.topic",
+            "columnName": "state_topic",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "stateTopic.qos",
+            "columnName": "state_qos",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "stateTopic.retained",
+            "columnName": "state_retained",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "valueTopic.topic",
+            "columnName": "value_topic",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "valueTopic.qos",
+            "columnName": "value_qos",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "valueTopic.retained",
+            "columnName": "value_retained",
+            "affinity": "INTEGER",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'efb254bcacfa841b7fd43d762d46455f')"
+    ]
+  }
+}

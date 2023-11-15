@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Material You -->
+    <color name="accent1_lighter">@android:color/system_accent1_200</color>
+    <color name="accent1_darker">@android:color/system_accent1_800</color>
+    <color name="accent2_500">@android:color/system_accent2_500</color>
+    <color name="accent3_500">@android:color/system_accent3_500</color>
+    <color name="neutral1_500">@android:color/system_neutral1_500</color>
+    <color name="neutral2_500">@android:color/system_neutral2_500</color>
+    <color name="neutral1_0">@android:color/system_neutral1_0</color>
+</resources>
