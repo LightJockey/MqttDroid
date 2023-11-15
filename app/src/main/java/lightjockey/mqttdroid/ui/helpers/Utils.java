@@ -3,6 +3,7 @@ package lightjockey.mqttdroid.ui.helpers;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BlendMode;
@@ -10,6 +11,7 @@ import android.graphics.BlendModeColorFilter;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
@@ -136,6 +138,12 @@ public class Utils {
                 },
                 ctx.getString(android.R.string.cancel),
                 null);
+    }
+
+    public static void startUrlIntent(String url) {
+        Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        MqttDroidApp.appContext.startActivity(i);
     }
 
     public static int getThemePrimaryColorInverted(final Context ctx) {

@@ -51,4 +51,11 @@
             app:summary="@string/pref_sum_backup_restore" />
     </PreferenceCategory>
 
+    <PreferenceCategory app:title="@string/pref_cat_info">
+        <Preference
+            app:key="@string/pref_key_info_github"
+            app:title="@string/pref_title_info_github"
+            app:icon="@drawable/ic_github" />
+    </PreferenceCategory>
+
 </PreferenceScreen>

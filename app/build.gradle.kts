@@ -3,6 +3,11 @@ plugins {
 }
 
 android {
+    // Gets the latest git commit hash for autoversioning
+    val gitCommitHash = providers.exec {
+        commandLine("git", "rev-parse", "--short", "HEAD")
+    }.standardOutput.asText.get().toString().trim()
+
     namespace = "lightjockey.mqttdroid"
     compileSdk = 34
 
@@ -12,6 +17,8 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+        // Latest commit hash as BuildConfig.COMMIT_HASH
+        buildConfigField("String", "COMMIT_HASH", "\"$gitCommitHash\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
@@ -39,6 +46,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_9
     }
     buildFeatures {
+        buildConfig = true
         viewBinding = true
         dataBinding = true
     }

@@ -40,6 +40,7 @@
 
     <string name="pref_cat_mqtt_broker">MQTT Broker</string>
     <string name="pref_cat_backup">Backup</string>
+    <string name="pref_cat_info">Info</string>
 
     <string name="pref_key_mqtt_broker_host">mqtt_broker_host</string>
     <string name="pref_key_mqtt_broker_port">mqtt_broker_port</string>
@@ -50,6 +51,7 @@
     <string name="pref_key_mqtt_broker_test">mqtt_broker_test</string>
     <string name="pref_key_backup_save">backup_save</string>
     <string name="pref_key_backup_restore">backup_restore</string>
+    <string name="pref_key_info_github">info_github</string>
 
     <string name="pref_title_mqtt_broker_host">Host</string>
     <string name="pref_title_mqtt_broker_port">Port</string>
@@ -60,11 +62,13 @@
     <string name="pref_title_mqtt_broker_test">Test Connection</string>
     <string name="pref_title_backup_save">Backup on broker</string>
     <string name="pref_title_backup_restore">Restore from broker</string>
+    <string name="pref_title_info_github">MqttDroid on GitHub</string>
 
     <string name="pref_sum_mqtt_client_id">Used by the broker to identify this client. If not set, will default to \"mqttdroid\"</string>
     <string name="pref_sum_broker_test">Check if MqttDroid can connect to the broker with the settings provided above</string>
     <string name="pref_sum_backup_save">Backup controls as a retained message on the MQTT broker</string>
     <string name="pref_sum_backup_restore">Restore controls from a previous backup</string>
+    <string name="pref_sum_info_github">Commit: %1$s</string>
 
     <string name="icd_title">Select Custom Icon</string>
 </resources>

@@ -7,6 +7,7 @@ import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
+import lightjockey.mqttdroid.BuildConfig;
 import lightjockey.mqttdroid.MqttDroidApp;
 import lightjockey.mqttdroid.MqttClient;
 import lightjockey.mqttdroid.R;
@@ -38,6 +39,14 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         if (clickablePref != null) {
             clickablePref.setOnPreferenceClickListener(pref -> {
                 Utils.testBrokerConnection(getContext());
+                return true;
+            });
+        }
+        clickablePref = findPreference(MqttDroidApp.appContext.getString(R.string.pref_key_info_github));
+        if (clickablePref != null) {
+            clickablePref.setSummary(MqttDroidApp.appContext.getString(R.string.pref_sum_info_github, BuildConfig.COMMIT_HASH));
+            clickablePref.setOnPreferenceClickListener(pref -> {
+                Utils.startUrlIntent("https://github.com/LightJockey/MqttDroid");
                 return true;
             });
         }
