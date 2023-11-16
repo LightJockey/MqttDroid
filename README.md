@@ -8,7 +8,7 @@ It provides a friendly interface to create and edit custom devices with user-def
 
 **NOTE:** This app is **NOT** a standalone MQTT dashboard. It relies on Android's device controls to actually send and display MQTT messages.
 
-*It was mainly tested on stock Android. Different vendors and Android flavors may have implemented device controls in a way that could make this app less straight-forward to use or straight up useless.*
+*It was mainly tested on stock Android. Different vendors and Android flavors may have implemented device controls in a way that could make this app less straightforward to use or straight up useless.*
 
 ## ✨ Features
 - Robust MQTT client based on [HiveMQ](https://github.com/hivemq/hivemq-mqtt-client)
@@ -32,6 +32,7 @@ It provides a friendly interface to create and edit custom devices with user-def
 [<img src="./images/screenshot-4.png" width=25%>](./images/screenshot-4.png)
 
 ## May implement in the future 🧐
+- Separate pub / sub topics
 - Thermostat control (two separate controls are needed as of now, one **toggle with slider** for settings and one **gauge** for readings)
 - RGB control with color picker
 - Multiple topics and payloads for triggers
