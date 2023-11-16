@@ -95,7 +95,7 @@ public class MqttDroidControlsService extends ControlsProviderService {
             }
         }
 
-        return FlowAdapters.toFlowPublisher(controlsReplayProcessor);
+        return FlowAdapters.toFlowPublisher(controlsReplayProcessor.concatMap(i -> Flowable.just(i).delay(10, TimeUnit.MILLISECONDS)));
     }
 
     @Override
