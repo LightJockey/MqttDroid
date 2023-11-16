@@ -202,7 +202,7 @@ public class MqttClient {
     private static void onControlMsgReceived(Mqtt3Publish msg, MqttControl control) {
         onMsgReceived(msg);
         if (MqttDroidControlsService.instance != null)
-            MqttDroidControlsService.instance.UpdateControl(control, false);
+            MqttDroidControlsService.instance.updateControl(control, false);
     }
 
     private static void onMsgReceived(Mqtt3Publish msg) {

@@ -31,6 +31,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.Flow;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import io.reactivex.rxjava3.core.Flowable;
@@ -39,16 +40,12 @@ import lightjockey.mqttdroid.ui.controls.ControlActivity;
 import lightjockey.mqttdroid.ui.helpers.Utils;
 
 public class MqttDroidControlsService extends ControlsProviderService {
-    public static MqttDroidControlsService instance;
-
     private static final String TAG = "MqttDroidControlsService";
 
-    private AppRepository repository;
+    public static MqttDroidControlsService instance;
 
-    private final Map<String, ReplayProcessor<Control>> controlsProcessors = new HashMap<>();
-    public ReplayProcessor<Control> GetControlProcessor(String controlId) {
-        return controlsProcessors.get(controlId);
-    }
+    private AppRepository repository;
+    private ReplayProcessor<Control> controlsReplayProcessor;
 
     private final Map<String, MqttControl> controlsMap = new HashMap<>();
     public MqttControl getControlForId(String controlId) {
@@ -85,22 +82,20 @@ public class MqttDroidControlsService extends ControlsProviderService {
     @NonNull
     @Override
     public Flow.Publisher<Control> createPublisherFor(@NonNull List<String> controlIds) {
-        ReplayProcessor<Control> updatePublisher = ReplayProcessor.create(8);
+        controlsReplayProcessor = ReplayProcessor.create(8);
 
         repository.getAllControls().forEach(control -> controlsMap.put(control.getId() + "", control));
 
         MqttClient.disconnect();
-        controlIds.forEach(controlId -> {
-            controlsProcessors.put(controlId, updatePublisher);
-
+        for (String controlId : controlIds) {
             MqttControl control = getControlForId(controlId);
             if (control != null) {
                 MqttClient.bindControl(control);
-                UpdateControl(control, false);
+                updateControl(control, false);
             }
-        });
+        }
 
-        return FlowAdapters.toFlowPublisher(updatePublisher);
+        return FlowAdapters.toFlowPublisher(controlsReplayProcessor);
     }
 
     @Override
@@ -126,18 +121,17 @@ public class MqttDroidControlsService extends ControlsProviderService {
         }
     }
 
-    public void UpdateControl(MqttControl control, boolean updateMap) {
-        Log.d(TAG, "Updating control: " + control.toString());
+    public void updateControl(MqttControl control, boolean updateMap) {
+        Log.d(TAG, "Updating control: " + control);
 
         if (updateMap)
             controlsMap.put(control.getId() + "", control);
 
-        ReplayProcessor<Control> controlProcessor = GetControlProcessor(control.getId() + "");
-        if (controlProcessor != null)
-            controlProcessor.onNext(MakeControl(control));
+        if (controlsReplayProcessor != null)
+            controlsReplayProcessor.onNext(makeControl(control));
     }
 
-    private Control MakeControl(MqttControl control) {
+    private Control makeControl(MqttControl control) {
         ControlTemplate controlTemplate;
         String controlId = control.getId() + "";
 
@@ -199,10 +193,6 @@ public class MqttDroidControlsService extends ControlsProviderService {
     @SuppressLint("WrongConstant")
     @NonNull
     private Control createStatefulControl(MqttControl control, ControlTemplate template) {
-        /*Intent intent = new Intent(this, MainActivity.class)
-                .putExtra(EXTRA_MESSAGE, "$title $state")
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);*/
-
         PendingIntent pendingIntent;
         if (control.isTrigger())
             pendingIntent = createDummyPendingIntent();

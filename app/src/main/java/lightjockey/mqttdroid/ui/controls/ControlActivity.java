@@ -171,7 +171,7 @@ public class ControlActivity extends AppCompatActivity implements IconDialog.Cal
         MqttClient.bindControl(control);
 
         if (MqttDroidControlsService.instance != null)
-            MqttDroidControlsService.instance.UpdateControl(control, true);
+            MqttDroidControlsService.instance.updateControl(control, true);
 
         ControlsProviderService.requestAddControl(this,
                 new ComponentName(getApplicationContext(), MqttDroidControlsService.class),
