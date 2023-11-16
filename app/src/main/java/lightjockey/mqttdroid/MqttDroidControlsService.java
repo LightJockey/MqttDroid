@@ -2,8 +2,10 @@ package lightjockey.mqttdroid;
 
 import android.annotation.SuppressLint;
 import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Icon;
 import android.os.Build;
@@ -61,6 +63,14 @@ public class MqttDroidControlsService extends ControlsProviderService {
 
         instance = this;
         repository = MqttDroidApp.appInstance.repository;
+
+        IntentFilter intentFilter = new IntentFilter(Intent.ACTION_SCREEN_OFF);
+        registerReceiver(new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                MqttClient.disconnect();
+            }
+        }, intentFilter);
     }
     @Override
     public void onDestroy() {
