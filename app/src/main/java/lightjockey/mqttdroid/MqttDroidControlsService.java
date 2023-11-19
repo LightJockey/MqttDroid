@@ -238,35 +238,21 @@ public class MqttDroidControlsService extends ControlsProviderService {
                 statusText += control.controlStatus.getValue();*/
         }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            return new Control.StatefulBuilder(control.getId() + "", pendingIntent)
-                    .setTitle(control.getName())
-                    .setSubtitle(control.getSubtitle())
-                    .setControlTemplate(template)
-                    .setDeviceType(control.getFlavour())
-                    .setStructure(control.getGroup())
-                    //.setZone(control.getGroup()) // Zones are pretty much useless? They only appear in the add controls screen, at least on AOSP
-                    .setCustomIcon(control.isCustomFlavour() ? Icon.createWithBitmap(Utils.getCustomIconBitmap(control.getCustomIcon(), false)) : null)
-                    .setCustomColor(control.isCustomFlavour() ? ColorStateList.valueOf(control.getCustomColor()) : null)
-                    .setAuthRequired(control.getNeedsUnlocking())
-                    .setStatus(Control.STATUS_OK)
-                    .setStatusText(statusText)
-                    .build();
-        }
-        else {
-            return new Control.StatefulBuilder(control.getId() + "", pendingIntent)
-                    .setTitle(control.getName())
-                    .setSubtitle(control.getSubtitle())
-                    .setControlTemplate(template)
-                    .setDeviceType(control.getFlavour())
-                    .setStructure(control.getGroup())
-                    //.setZone(control.getGroup())
-                    .setCustomIcon(control.isCustomFlavour() ? Icon.createWithBitmap(Utils.getCustomIconBitmap(control.getCustomIcon(), false)) : null)
-                    .setCustomColor(control.isCustomFlavour() ? ColorStateList.valueOf(control.getCustomColor()) : null)
-                    .setStatus(Control.STATUS_OK)
-                    .setStatusText(statusText)
-                    .build();
-        }
+        Control.StatefulBuilder builder = new Control.StatefulBuilder(control.getId() + "", pendingIntent)
+                .setTitle(control.getName())
+                .setSubtitle(control.getSubtitle())
+                .setControlTemplate(template)
+                .setDeviceType(control.getFlavour())
+                .setStructure(control.getGroup())
+                //.setZone(control.getGroup())
+                .setCustomIcon(control.isCustomFlavour() ? Icon.createWithBitmap(Utils.getCustomIconBitmap(control.getCustomIcon(), false)) : null)
+                .setCustomColor(control.isCustomFlavour() ? ColorStateList.valueOf(control.getCustomColor()) : null)
+                .setStatus(Control.STATUS_OK)
+                .setStatusText(statusText);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+            builder.setAuthRequired(control.getNeedsUnlocking());
+
+        return builder.build();
     }
 
     private static PendingIntent createDummyPendingIntent() {
