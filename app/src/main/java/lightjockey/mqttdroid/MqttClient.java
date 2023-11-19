@@ -7,6 +7,7 @@ import android.util.Log;
 import com.hivemq.client.mqtt.datatypes.MqttQos;
 import com.hivemq.client.mqtt.mqtt3.Mqtt3BlockingClient;
 import com.hivemq.client.mqtt.mqtt3.Mqtt3Client;
+import com.hivemq.client.mqtt.mqtt3.Mqtt3ClientBuilder;
 import com.hivemq.client.mqtt.mqtt3.message.connect.connack.Mqtt3ConnAck;
 import com.hivemq.client.mqtt.mqtt3.message.publish.Mqtt3Publish;
 
@@ -52,27 +53,22 @@ public class MqttClient {
 
         setClientId();
 
+        Mqtt3ClientBuilder builder = Mqtt3Client.builder()
+                .identifier(getClientId())
+                .serverHost(getBrokerHost())
+                .serverPort(getBrokerPort())
+                .addDisconnectedListener((ctx) -> Log.d(TAG, "Client disconnected"));
         try {
-            if (MqttDroidApp.GetSharedPref(R.string.pref_key_mqtt_client_use_auth, false)) {
-                client = Mqtt3Client.builder()
-                        .identifier(getClientId())
-                        .serverHost(getBrokerHost())
-                        .serverPort(getBrokerPort())
-                        .simpleAuth()
-                            .username(MqttDroidApp.GetSharedPref(R.string.pref_key_mqtt_client_auth_username, ""))
-                            .password(MqttDroidApp.GetSharedPref(R.string.pref_key_mqtt_client_auth_password, "").getBytes())
-                            .applySimpleAuth()
-                        .buildBlocking();
+            boolean useAuth = MqttDroidApp.GetSharedPref(R.string.pref_key_mqtt_client_use_auth, false);
+            if (useAuth) {
+                builder = builder.simpleAuth()
+                        .username(MqttDroidApp.GetSharedPref(R.string.pref_key_mqtt_client_auth_username, ""))
+                        .password(MqttDroidApp.GetSharedPref(R.string.pref_key_mqtt_client_auth_password, "").getBytes())
+                        .applySimpleAuth();
             }
-            else {
-                client = Mqtt3Client.builder()
-                        .identifier(getClientId())
-                        .serverHost(getBrokerHost())
-                        .serverPort(getBrokerPort())
-                        .buildBlocking();
-            }
+            client = builder.buildBlocking();
 
-            Log.d(TAG, "Connecting client (id: " + MQTT_CLIENT_ID + ", broker host: " + client.getConfig().getServerAddress() + ") ...");
+            Log.d(TAG, "Connecting client (id: " + MQTT_CLIENT_ID + ", broker host: " + client.getConfig().getServerAddress() + ", use auth: " + useAuth + ") ...");
             Mqtt3ConnAck conn = client.connectWith()
                     .cleanSession(true)
                     .keepAlive(60)
@@ -95,9 +91,7 @@ public class MqttClient {
     public static void disconnect() {
         if (!isConnected())
             return;
-
         client.disconnect();
-        Log.d(TAG, "Client disconnected");
     }
 
     public static void bindControl(MqttControl control) {
