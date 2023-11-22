@@ -13,7 +13,7 @@ It provides a friendly interface to create and edit custom devices with user-def
 ## ✨ Features
 - Robust MQTT client based on [HiveMQ](https://github.com/hivemq/hivemq-mqtt-client)
 - Supports these control types: **toggle**, **toggle with slider**, **range**, **trigger** and **gauge**
-- One MQTT topic per control action, with full QoS and retain support
+- One MQTT topic per control action, with separable pub / sub, QoS and retain support
 - Customizable title, subtitle and group per control
 - Customizable look and feel of each control tile (a range of stock Android flavors are offered. Alternatively, a custom icon and color can be chosen)
 - Customizable toggle on / off payloads
@@ -32,7 +32,7 @@ It provides a friendly interface to create and edit custom devices with user-def
 [<img src="./images/screenshot-4.png" width=25%>](./images/screenshot-4.png)
 
 ## May implement in the future 🧐
-- Separate pub / sub topics
+- ~~Separate pub / sub topics~~
 - Thermostat control (two separate controls are needed as of now, one **toggle with slider** for settings and one **gauge** for readings)
 - RGB control with color picker
 - Multiple topics and payloads for triggers

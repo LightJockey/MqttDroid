@@ -4,9 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+        <import type="android.view.View" />
+        <variable name="topicSub" type="String" />
         <variable name="topic" type="String" />
         <variable name="qos" type="Integer" />
         <variable name="retained" type="Boolean" />
+        <variable name="isPubSub" type="Boolean" />
+        <variable name="canBePubSub" type="Boolean" />
         <variable name="controlActivity" type="lightjockey.mqttdroid.ui.controls.ControlActivity" />
     </data>
 
@@ -21,13 +25,38 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="4dp"
-            android:hint="Topic">
+            android:hint="@{isPubSub ? `Pub Topic` : `Topic`}">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
                 android:text="@={topic}" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:checked="@={isPubSub}"
+            android:text="Separate pub sub topics"
+            android:visibility="@{canBePubSub ? View.VISIBLE : View.GONE}" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textInputLayout_SubTopic"
+            style="@style/Widget.Material3.TextInputLayout.FilledBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:hint="Sub Topic"
+            android:visibility="@{isPubSub ? View.VISIBLE : View.GONE}">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:singleLine="true"
+                android:text="@={topicSub}" />
 
         </com.google.android.material.textfield.TextInputLayout>
 

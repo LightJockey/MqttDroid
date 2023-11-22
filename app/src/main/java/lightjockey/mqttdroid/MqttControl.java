@@ -61,6 +61,55 @@ public class MqttControl extends BaseObservable implements Serializable {
         public final static EControlFlavour[] _VALUES = values();
     }
 
+    public static class ControlTopicPubSub extends ControlTopic {
+        @ColumnInfo(name = "topic_sub")
+        private String topicSub = "";
+        @ColumnInfo(name = "is_pub_sub")
+        private boolean isPubSub = false;
+
+        public ControlTopicPubSub(ControlTopicPubSub otherTopicPubSub) {
+            this.topic = otherTopicPubSub.topic;
+            this.topicSub = otherTopicPubSub.topicSub;
+            this.isPubSub = otherTopicPubSub.isPubSub;
+            this.qos = otherTopicPubSub.qos;
+            this.retained = otherTopicPubSub.retained;
+        }
+        public ControlTopicPubSub() { }
+
+        @Bindable
+        public String getTopicSub() {
+            return this.isPubSub ? this.topicSub : this.topic;
+        }
+        public void setTopicSub(String topicSub) {
+            if (topicSub != null && !this.topicSub.equals(topicSub)) {
+                this.topicSub = topicSub;
+                notifyPropertyChanged(BR.topicSub);
+            }
+        }
+        @Bindable
+        public boolean getIsPubSub() {
+            return this.isPubSub;
+        }
+        public void setIsPubSub(boolean isPubSub) {
+            if (this.isPubSub != isPubSub) {
+                this.isPubSub = isPubSub;
+                notifyPropertyChanged(BR.isPubSub);
+            }
+        }
+
+        @Override
+        public boolean equals(Object other) {
+            if (!(other instanceof ControlTopicPubSub))
+                return false;
+
+            ControlTopicPubSub otherPubSubTopic = (ControlTopicPubSub)other;
+
+            return  super.equals(otherPubSubTopic) &&
+                    topicSub.equals(otherPubSubTopic.topicSub) &&
+                    isPubSub == otherPubSubTopic.isPubSub;
+        }
+    }
+
     public static class ControlTopic extends BaseObservable {
         public enum EQos {
             QOS_0(R.string.control_topic_qos_0),
@@ -82,11 +131,11 @@ public class MqttControl extends BaseObservable implements Serializable {
         }
 
         @ColumnInfo(name = "topic")
-        private String topic = "";
+        protected String topic = "";
         @ColumnInfo(name = "qos")
-        private int qos = 1;
+        protected int qos = 1;
         @ColumnInfo(name = "retained")
-        private boolean retained = false;
+        protected boolean retained = false;
 
         public ControlTopic(ControlTopic otherTopic) {
             this.topic = otherTopic.topic;
@@ -101,7 +150,7 @@ public class MqttControl extends BaseObservable implements Serializable {
             return this.topic;
         }
         public void setTopic(String topic) {
-            if (!this.topic.equals(topic)) {
+            if (topic != null && !this.topic.equals(topic)) {
                 this.topic = topic;
                 notifyPropertyChanged(BR.topic);
             }
@@ -200,7 +249,7 @@ public class MqttControl extends BaseObservable implements Serializable {
     @ColumnInfo(name = "gauge_topic")
     private String gaugeTopic = "";
     @Embedded(prefix = "state_")
-    public ControlTopic stateTopic = new ControlTopic();
+    public ControlTopicPubSub stateTopic = new ControlTopicPubSub();
     @ColumnInfo(name = "state_on_payload")
     private String stateOnPayload = "On";
     @ColumnInfo(name = "state_off_payload")
@@ -208,7 +257,7 @@ public class MqttControl extends BaseObservable implements Serializable {
     @ColumnInfo(name = "state_label_from_payload")
     private boolean stateLabelFromPayload = false;
     @Embedded(prefix = "value_")
-    public ControlTopic valueTopic = new ControlTopic();
+    public ControlTopicPubSub valueTopic = new ControlTopicPubSub();
     @ColumnInfo(name = "value_min")
     private float valueMin = 0;
     @ColumnInfo(name = "value_max")
@@ -243,11 +292,11 @@ public class MqttControl extends BaseObservable implements Serializable {
         this.triggerTopic = new ControlTopic(otherControl.triggerTopic);
         this.triggerPayload = otherControl.triggerPayload;
         this.gaugeTopic = otherControl.gaugeTopic;
-        this.stateTopic = new ControlTopic(otherControl.stateTopic);
+        this.stateTopic = new ControlTopicPubSub(otherControl.stateTopic);
         this.stateOnPayload = otherControl.stateOnPayload;
         this.stateOffPayload = otherControl.stateOffPayload;
         this.stateLabelFromPayload = otherControl.stateLabelFromPayload;
-        this.valueTopic = new ControlTopic(otherControl.valueTopic);
+        this.valueTopic = new ControlTopicPubSub(otherControl.valueTopic);
         this.valueMin = otherControl.valueMin;
         this.valueMax = otherControl.valueMax;
         this.valueStep = otherControl.valueStep;
@@ -296,7 +345,7 @@ public class MqttControl extends BaseObservable implements Serializable {
         return this.name;
     }
     public void setName(String name) {
-        if (!this.name.equals(name)) {
+        if (name != null && !this.name.equals(name)) {
             this.name = name;
             notifyPropertyChanged(BR.name);
         }
@@ -306,7 +355,7 @@ public class MqttControl extends BaseObservable implements Serializable {
         return this.subtitle;
     }
     public void setSubtitle(String subtitle) {
-        if (!this.subtitle.equals(subtitle)) {
+        if (subtitle != null && !this.subtitle.equals(subtitle)) {
             this.subtitle = subtitle;
             notifyPropertyChanged(BR.subtitle);
         }
@@ -314,7 +363,7 @@ public class MqttControl extends BaseObservable implements Serializable {
     @Bindable
     public String getGroup() { return this.group; }
     public void setGroup(String group) {
-        if (!this.group.equals(group)) {
+        if (group != null && !this.group.equals(group)) {
             this.group = group;
             notifyPropertyChanged(BR.group);
         }
@@ -358,7 +407,7 @@ public class MqttControl extends BaseObservable implements Serializable {
         return this.triggerPayload;
     }
     public void setTriggerPayload(String triggerPayload) {
-        if (!this.triggerPayload.equals(triggerPayload)) {
+        if (triggerPayload != null && !this.triggerPayload.equals(triggerPayload)) {
             this.triggerPayload = triggerPayload;
             notifyPropertyChanged(BR.triggerPayload);
         }
@@ -368,7 +417,7 @@ public class MqttControl extends BaseObservable implements Serializable {
         return this.gaugeTopic;
     }
     public void setGaugeTopic(String gaugeTopic) {
-        if (!this.gaugeTopic.equals(gaugeTopic)) {
+        if (gaugeTopic != null && !this.gaugeTopic.equals(gaugeTopic)) {
             this.gaugeTopic = gaugeTopic;
             notifyPropertyChanged(BR.gaugeTopic);
         }
@@ -376,7 +425,7 @@ public class MqttControl extends BaseObservable implements Serializable {
     @Bindable
     public String getStateOnPayload() { return this.stateOnPayload; }
     public void setStateOnPayload(String stateOnPayload) {
-        if (!this.stateOnPayload.equals(stateOnPayload)) {
+        if (stateOnPayload != null && !this.stateOnPayload.equals(stateOnPayload)) {
             this.stateOnPayload = stateOnPayload;
             notifyPropertyChanged(BR.stateOnPayload);
         }
@@ -384,7 +433,7 @@ public class MqttControl extends BaseObservable implements Serializable {
     @Bindable
     public String getStateOffPayload() { return this.stateOffPayload; }
     public void setStateOffPayload(String stateOffPayload) {
-        if (!this.stateOffPayload.equals(stateOffPayload)) {
+        if (stateOffPayload != null && !this.stateOffPayload.equals(stateOffPayload)) {
             this.stateOffPayload = stateOffPayload;
             notifyPropertyChanged(BR.stateOffPayload);
         }

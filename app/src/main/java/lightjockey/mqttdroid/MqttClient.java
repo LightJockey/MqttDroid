@@ -101,8 +101,8 @@ public class MqttClient {
                 onControlMsgReceived(msg, control);
             });
         }
-        if ((control.isToggle() || control.isToggleRange()) && !Utils.isStringNullOrEmpty(control.stateTopic.getTopic())) {
-            subscribe(control.stateTopic.getTopic(), (msg) -> {
+        if ((control.isToggle() || control.isToggleRange()) && !Utils.isStringNullOrEmpty(control.stateTopic.getTopicSub())) {
+            subscribe(control.stateTopic.getTopicSub(), (msg) -> {
                 String payload = new String(msg.getPayloadAsBytes());
                 if (payload.equals(control.getStateOnPayload()))
                     control.controlStatus.state = true;
@@ -111,8 +111,8 @@ public class MqttClient {
                 onControlMsgReceived(msg, control);
             });
         }
-        if ((control.isRange() || control.isToggleRange()) && !Utils.isStringNullOrEmpty(control.valueTopic.getTopic())) {
-            subscribe(control.valueTopic.getTopic(), (msg) -> {
+        if ((control.isRange() || control.isToggleRange() && !Utils.isStringNullOrEmpty(control.valueTopic.getTopicSub()))) {
+            subscribe(control.valueTopic.getTopicSub(), (msg) -> {
                 String payload = new String(msg.getPayloadAsBytes());
                 try {
                     control.controlStatus.setValue(Float.parseFloat(payload));
@@ -126,10 +126,10 @@ public class MqttClient {
     public static void unbindControl(MqttControl control) {
         if (control.isGauge() && !Utils.isStringNullOrEmpty(control.getGaugeTopic()))
             unsubscribe(control.getGaugeTopic());
-        if ((control.isToggle() || control.isToggleRange()) && !Utils.isStringNullOrEmpty(control.stateTopic.getTopic()))
-            unsubscribe(control.stateTopic.getTopic());
-        if ((control.isRange() || control.isToggleRange()) && !Utils.isStringNullOrEmpty(control.valueTopic.getTopic()))
-            unsubscribe(control.valueTopic.getTopic());
+        if ((control.isToggle() || control.isToggleRange()) && !Utils.isStringNullOrEmpty(control.stateTopic.getTopicSub()))
+            unsubscribe(control.stateTopic.getTopicSub());
+        if ((control.isRange() || control.isToggleRange()) && !Utils.isStringNullOrEmpty(control.valueTopic.getTopicSub()))
+            unsubscribe(control.valueTopic.getTopicSub());
     }
 
     public static void subscribe(String topic, Consumer<Mqtt3Publish> callback) {

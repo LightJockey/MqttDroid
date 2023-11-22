@@ -324,9 +324,12 @@
                             <include
                                 android:id="@+id/mqttTopic_State"
                                 layout="@layout/control_mqtt_topic"
+                                app:topicSub="@={control.stateTopic.topicSub}"
                                 app:topic="@={control.stateTopic.topic}"
                                 app:qos="@={control.stateTopic.qos}"
                                 app:retained="@={control.stateTopic.retained}"
+                                app:isPubSub="@={control.stateTopic.isPubSub}"
+                                app:canBePubSub="@{true}"
                                 app:controlActivity="@={controlActivity}" />
 
                             <LinearLayout
@@ -420,9 +423,12 @@
                             <include
                                 android:id="@+id/mqttTopic_Value"
                                 layout="@layout/control_mqtt_topic"
+                                app:topicSub="@={control.valueTopic.topicSub}"
                                 app:topic="@={control.valueTopic.topic}"
                                 app:qos="@={control.valueTopic.qos}"
                                 app:retained="@={control.valueTopic.retained}"
+                                app:isPubSub="@={control.valueTopic.isPubSub}"
+                                app:canBePubSub="@{true}"
                                 app:controlActivity="@={controlActivity}" />
 
                             <LinearLayout
