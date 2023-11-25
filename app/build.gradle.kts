@@ -6,7 +6,15 @@ android {
     // Gets the latest git commit hash for autoversioning
     val gitCommitHash = providers.exec {
         commandLine("git", "rev-parse", "--short", "HEAD")
-    }.standardOutput.asText.get().toString().trim()
+    }.standardOutput.asText.get().trim()
+    // Gets the total number of commits for autoversioning
+    val gitCommitCount = providers.exec {
+        commandLine("git", "rev-list", "--count", "HEAD")
+    }.standardOutput.asText.get().trim().toInt()
+    // Gets the latest git tag for autoversioning
+    val gitLatestTag = providers.exec {
+        commandLine("git", "describe", "--tags", "--abbrev=0")
+    }.standardOutput.asText.get().trim()
 
     namespace = "lightjockey.mqttdroid"
     compileSdk = 34
@@ -15,8 +23,8 @@ android {
         applicationId = "lightjockey.mqttdroid"
         minSdk = 30
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = gitCommitCount
+        versionName = gitLatestTag
         // Latest commit hash as BuildConfig.COMMIT_HASH
         buildConfigField("String", "COMMIT_HASH", "\"$gitCommitHash\"")
 
