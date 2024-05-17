@@ -2,9 +2,11 @@ package lightjockey.mqttdroid.ui.settings;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.InputType;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.preference.EditTextPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
@@ -19,6 +21,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     public void onCreatePreferences(@Nullable Bundle savedInstanceState, @Nullable String rootKey) {
         setPreferencesFromResource(R.xml.preferences, rootKey);
         MqttDroidApp.sharedPrefs.registerOnSharedPreferenceChangeListener(this);
+
+        EditTextPreference mqttBrokerPortPref = findPreference(MqttDroidApp.appContext.getString(R.string.pref_key_mqtt_broker_port));
+        if (mqttBrokerPortPref != null)
+            mqttBrokerPortPref.setOnBindEditTextListener(editText -> editText.setInputType(InputType.TYPE_CLASS_NUMBER));
 
         updateMqttAuthPrefs();
 

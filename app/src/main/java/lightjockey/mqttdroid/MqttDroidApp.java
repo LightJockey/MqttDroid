@@ -6,6 +6,7 @@ import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -60,14 +61,18 @@ public class MqttDroidApp extends Application {
 
     @SuppressWarnings("unchecked")
     public static <T> T GetSharedPref(int key, T def) {
+        String keyStr = appContext.getString(key);
         try {
             if (def instanceof String)
-                return (T)sharedPrefs.getString(appContext.getString(key), (String)def);
+                return (T)sharedPrefs.getString(keyStr, (String)def);
             else if (def instanceof Integer)
-                return (T)(Integer)sharedPrefs.getInt(appContext.getString(key), (Integer)def);
+                return (T)Integer.valueOf(sharedPrefs.getString(keyStr, String.valueOf(def)));
             else if (def instanceof Boolean)
-                return (T)(Boolean)sharedPrefs.getBoolean(appContext.getString(key), (Boolean)def);
-        } catch (ClassCastException ignored) { }
+                return (T)(Boolean)sharedPrefs.getBoolean(keyStr, (Boolean)def);
+        }
+        catch (Exception e) {
+            Log.e(TAG, "Error getting pref " + keyStr + " (" + e.getMessage() + ")");
+        }
         return def;
     }
 
