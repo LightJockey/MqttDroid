@@ -11,9 +11,13 @@ import com.hivemq.client.mqtt.mqtt3.Mqtt3ClientBuilder;
 import com.hivemq.client.mqtt.mqtt3.message.connect.connack.Mqtt3ConnAck;
 import com.hivemq.client.mqtt.mqtt3.message.publish.Mqtt3Publish;
 
+import java.security.KeyStore;
 import java.util.function.Consumer;
 
+import javax.net.ssl.TrustManagerFactory;
+
 import lightjockey.mqttdroid.ui.helpers.Utils;
+import lightjockey.mqttdroid.ui.helpers.UtilsSecurity;
 
 public class MqttClient {
     public static final String TAG = "MQTT";
@@ -21,7 +25,7 @@ public class MqttClient {
     private static final String MQTT_BROKER_DEFAULT_HOST = "192.168.1.1";
     private static final int MQTT_BROKER_DEFAULT_PORT = 1883;
 
-    private static Mqtt3BlockingClient client;
+    public static Mqtt3BlockingClient client;
 
     @SuppressLint("HardwareIds")
     private static void setClientId() {
@@ -53,22 +57,42 @@ public class MqttClient {
 
         setClientId();
 
-        Mqtt3ClientBuilder builder = Mqtt3Client.builder()
+        Mqtt3ClientBuilder clBld = Mqtt3Client.builder()
                 .identifier(getClientId())
                 .serverHost(getBrokerHost())
                 .serverPort(getBrokerPort())
                 .addDisconnectedListener((ctx) -> Log.d(TAG, "Client disconnected"));
         try {
+            boolean useTLS = MqttDroidApp.GetSharedPref(R.string.pref_key_mqtt_broker_tls, false);
+            if (useTLS) {
+                TrustManagerFactory tmf;
+                boolean validateCert = MqttDroidApp.GetSharedPref(R.string.pref_key_mqtt_broker_tls_validate, false);
+                if (validateCert) {
+                    KeyStore ks = KeyStore.getInstance("AndroidCAStore");
+                    ks.load(null);
+                    tmf = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+                    tmf.init(ks); // Loads the trust store containing the system CA certs
+                }
+                else
+                    tmf = UtilsSecurity.trustAllCertsFactory();
+
+                clBld = clBld.sslConfig()
+                        .hostnameVerifier((hostname, session) -> true)
+                        .trustManagerFactory(tmf)
+                        .applySslConfig();
+            }
+
             boolean useAuth = MqttDroidApp.GetSharedPref(R.string.pref_key_mqtt_client_use_auth, false);
             if (useAuth) {
-                builder = builder.simpleAuth()
+                clBld = clBld.simpleAuth()
                         .username(MqttDroidApp.GetSharedPref(R.string.pref_key_mqtt_client_auth_username, ""))
                         .password(MqttDroidApp.GetSharedPref(R.string.pref_key_mqtt_client_auth_password, "").getBytes())
                         .applySimpleAuth();
             }
-            client = builder.buildBlocking();
 
-            Log.d(TAG, "Connecting client (id: " + MQTT_CLIENT_ID + ", broker host: " + client.getConfig().getServerAddress() + ", use auth: " + useAuth + ") ...");
+            client = clBld.buildBlocking();
+
+            Log.d(TAG, "Connecting client (id: " + MQTT_CLIENT_ID + ", broker host: " + client.getConfig().getServerAddress() + ", useTLS: " + useTLS + ", useAuth: " + useAuth + ") ...");
             Mqtt3ConnAck conn = client.connectWith()
                     .cleanSession(true)
                     .keepAlive(60)

@@ -73,10 +73,11 @@ public class Utils {
     public static void testBrokerConnection(final Context ctx) {
         MqttClient.disconnect();
         MqttClient.connect(true);
+        String brokerHost = MqttClient.client.getConfig().getServerAddress().toString();
         if (MqttClient.isConnected())
-            showSimpleDialog(ctx, "Test Passed", "Successfully connected to broker!");
+            showSimpleDialog(ctx, "Test Passed", "Successfully connected to broker at " + brokerHost + "!");
         else
-            showSimpleDialog(ctx, "Test Failed", "Couldn't connect to broker with the settings provided. Check logs for details");
+            showSimpleDialog(ctx, "Test Failed", "Couldn't connect to broker at " + brokerHost + ". Check logs for details");
         MqttClient.disconnect();
     }
 

@@ -26,7 +26,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         if (mqttBrokerPortPref != null)
             mqttBrokerPortPref.setOnBindEditTextListener(editText -> editText.setInputType(InputType.TYPE_CLASS_NUMBER));
 
-        updateMqttAuthPrefs();
+        updateDynamicPrefs();
 
         bindClickablePrefs();
     }
@@ -39,8 +39,9 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         if (key.contains("mqtt_"))
             MqttClient.disconnect();
 
-        if (key.equals(MqttDroidApp.appContext.getString(R.string.pref_key_mqtt_client_use_auth)))
-            updateMqttAuthPrefs();
+        if (key.equals(MqttDroidApp.appContext.getString(R.string.pref_key_mqtt_broker_tls)) ||
+            key.equals(MqttDroidApp.appContext.getString(R.string.pref_key_mqtt_client_use_auth)))
+            updateDynamicPrefs();
     }
 
     private static void setPrefEnabled(Preference pref, boolean enabled) {
@@ -49,7 +50,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         pref.setShouldDisableView(!enabled);
     }
 
-    private void updateMqttAuthPrefs() {
+    private void updateDynamicPrefs() {
+        Preference tlsValidatePref = findPreference(MqttDroidApp.appContext.getString(R.string.pref_key_mqtt_broker_tls_validate));
+        setPrefEnabled(tlsValidatePref, MqttDroidApp.sharedPrefs.getBoolean(MqttDroidApp.appContext.getString(R.string.pref_key_mqtt_broker_tls), false));
+
         boolean useAuth = MqttDroidApp.sharedPrefs.getBoolean(MqttDroidApp.appContext.getString(R.string.pref_key_mqtt_client_use_auth), false);
         Preference usernamePref = findPreference(MqttDroidApp.appContext.getString(R.string.pref_key_mqtt_client_auth_username));
         setPrefEnabled(usernamePref, useAuth);
